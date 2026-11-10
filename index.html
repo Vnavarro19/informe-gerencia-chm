@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Informe de Gerencia · Flota EX3600 · Octubre 2026</title>
+<meta name="description" content="Desempeño mensual de la flota EX3600, contrato MARC Palas, octubre 2026">
+<script src="assets/chart.umd.js"></script>
+<style>
+:root{
+  --navy:#1B2A5E; --navy-2:#24357A; --amber:#F2A900;
+  --s1:#3A56B8; --s2:#B87F00; --neutral:#C9CED9; --neutral-2:#A9B0C0;
+  --good:#2E7D4F; --warn:#B87F00; --bad:#C8102E;
+  --ink:#16191F; --ink-2:#4A5163; --ink-3:#6B7385; --line:#E4E7ED; --bg:#F5F6F9; --card:#FFFFFF;
+  --r:14px; --shadow:0 1px 2px rgba(16,24,40,.05),0 1px 3px rgba(16,24,40,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{font-family:"Segoe UI",Calibri,Carlito,Inter,system-ui,-apple-system,Arial,sans-serif;color:var(--ink);background:var(--bg);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+
+/* Top bar */
+.top{position:sticky;top:0;z-index:20;background:rgba(27,42,94,.97);backdrop-filter:blur(6px);color:#fff}
+.top .wrap{display:flex;align-items:center;gap:22px;height:60px}
+.brand{font-weight:700;letter-spacing:.2px;white-space:nowrap}
+.brand small{display:block;font-weight:400;font-size:11px;color:#C9D1EA;letter-spacing:.4px}
+nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin-left:auto}
+nav::-webkit-scrollbar{display:none}
+nav a{color:#DCE2F5;text-decoration:none;font-size:13px;padding:7px 11px;border-radius:8px;white-space:nowrap}
+nav a:hover,nav a.on{background:rgba(255,255,255,.12);color:#fff}
+.print{background:var(--amber);color:#1B2A5E;border:0;border-radius:8px;font-weight:700;font-size:13px;padding:8px 12px;cursor:pointer;white-space:nowrap}
+
+/* Hero */
+.hero{background:var(--navy);color:#fff;padding:54px 0 120px;position:relative}
+.eyebrow{color:var(--amber);font-weight:700;font-size:12px;letter-spacing:3px;text-transform:uppercase}
+.hero h1{font-size:44px;line-height:1.1;margin:12px 0 8px;font-weight:800;letter-spacing:-.5px}
+.hero .sub{font-size:20px;color:#DCE2F5}
+.hero .meta{margin-top:22px;display:flex;gap:28px;flex-wrap:wrap;color:#B9C3E3;font-size:13px}
+.hero .meta b{color:#fff;font-weight:600}
+
+/* KPI grid */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:-84px;position:relative}
+.kpi{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:18px 18px 16px}
+.kpi .v{font-size:34px;font-weight:800;line-height:1.05;color:var(--navy);letter-spacing:-.5px}
+.kpi .n{font-weight:600;font-size:14px;margin-top:6px}
+.kpi .m{font-size:12.5px;color:var(--ink-3);margin-top:2px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;margin-top:10px}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.ok{color:var(--good);background:#E8F3EC}.no{color:var(--bad);background:#FBE7EA}.na{color:var(--ink-3);background:#EEF0F4}
+.kpi.bad .v{color:var(--bad)}
+
+/* Focus banner */
+.focus{margin-top:18px;background:#FFF8E5;border:1px solid #F3DFA6;border-radius:var(--r);padding:14px 18px;font-size:15px}
+.focus b{color:#7A5500}
+
+/* Sections */
+section{padding:46px 0 6px}
+.sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+.sec-n{font-size:12px;font-weight:800;color:var(--s1);letter-spacing:2px;text-transform:uppercase}
+h2{font-size:26px;line-height:1.25;font-weight:750;color:var(--navy);max-width:980px;letter-spacing:-.2px}
+.lede{color:var(--ink-2);margin:6px 0 18px;max-width:900px}
+.grid{display:grid;gap:16px}
+.g-2{grid-template-columns:1.65fr 1fr}
+.g-2e{grid-template-columns:1fr 1fr}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.card h3{font-size:15px;font-weight:700;margin-bottom:2px}
+.card .cap{font-size:12.5px;color:var(--ink-3);margin-bottom:10px}
+.chart{position:relative;height:300px}
+.chart.tall{height:360px}
+.side .big{font-size:40px;font-weight:800;color:var(--navy);line-height:1}
+.side .big.r{color:var(--bad)}
+.side .lbl{color:var(--ink-3);font-size:13px;margin:4px 0 16px}
+.side ul{list-style:none;display:grid;gap:10px}
+.side li{position:relative;padding-left:16px;font-size:14px}
+.side li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:2px;background:var(--neutral-2)}
+.src{font-size:12px;color:var(--ink-3);margin-top:12px}
+details.data{margin-top:10px;font-size:13px}
+details.data summary{cursor:pointer;color:var(--s1);font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--ink-3);font-weight:700}
+.tbl-wrap{overflow-x:auto}
+
+/* Heatmap */
+.heat{table-layout:fixed}.heat td{font-variant-numeric:tabular-nums;text-align:center;font-size:13px;padding:6px 6px;border-bottom:2px solid #fff;border-right:2px solid #fff}
+.heat th{text-align:center}
+.heat td:first-child,.heat th:first-child{text-align:left;font-weight:700;color:var(--ink)}
+.h-a{background:#DCE4F8}.h-g{background:#E3F1E7}.h-y{background:#FCEFC9}.h-r{background:#F8D3D8;font-weight:700}.h-n{background:#ECEEF2;color:#9AA1B0}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-2);margin:6px 0 12px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:11px;border-radius:3px;display:inline-block}
+.tabs{display:inline-flex;background:#EEF0F4;border-radius:10px;padding:3px;margin-bottom:12px}
+.tabs button{border:0;background:transparent;font:inherit;font-size:13px;font-weight:600;color:var(--ink-2);padding:6px 14px;border-radius:8px;cursor:pointer}
+.tabs button.on{background:#fff;color:var(--navy);box-shadow:var(--shadow)}
+
+/* Notes per equipment */
+.eq-notes{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.eq{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#FCFCFD}
+.eq b{display:inline-block;background:var(--navy);color:#fff;border-radius:6px;padding:1px 8px;margin-right:6px;font-size:13px}
+.eq .k{font-weight:700;color:var(--bad)}
+
+/* Safety */
+.safety{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.safety .kpi .v{color:var(--bad);font-size:30px}
+
+/* Plan */
+.plan td,.plan th{text-align:left;white-space:normal;vertical-align:top}
+.plan td:nth-child(1){font-weight:700;white-space:nowrap}
+.plan td.f{white-space:nowrap;font-weight:700}
+.tag{display:inline-block;font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px;background:#FCEFC9;color:#7A5500;white-space:nowrap}
+
+/* Data quality */
+.dq{counter-reset:dq;display:grid;gap:10px}
+.dq div{counter-increment:dq;display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;background:#fff;border-radius:12px;padding:12px 14px;box-shadow:var(--shadow)}
+.dq div::before{content:counter(dq);width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;font-weight:800;display:grid;place-items:center}
+
+footer{margin-top:50px;padding:26px 0 40px;color:var(--ink-3);font-size:12.5px;border-top:1px solid var(--line)}
+
+@media (max-width:980px){
+  .kpis{grid-template-columns:repeat(2,1fr)} .g-2,.g-2e{grid-template-columns:1fr} .safety{grid-template-columns:repeat(2,1fr)}
+  .eq-notes{grid-template-columns:1fr} .hero h1{font-size:34px} nav{display:none}
+}
+@media print{
+  .top,.print,details.data{display:none!important}
+  body{background:#fff} .hero{padding:30px 0 100px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  section{break-inside:avoid;padding-top:24px} .card,.kpi{box-shadow:none;border:1px solid var(--line)}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">CHM Minería<small>CONTRATO MARC PALAS · CERREJÓN</small></div>
+    <nav id="nav">
+      <a href="#resumen">Resumen</a><a href="#seguridad">Seguridad</a><a href="#disponibilidad">Disponibilidad</a>
+      <a href="#planeacion">Planeación</a><a href="#programacion">Programación</a><a href="#confiabilidad">Confiabilidad</a>
+      <a href="#malos-actores">Malos actores</a><a href="#presupuesto">Presupuesto</a><a href="#soporte">Soporte</a><a href="#plan">Plan de acción</a>
+    </nav>
+    <button class="print" onclick="window.print()">Imprimir / PDF</button>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Informe de Gerencia</div>
+    <h1>Desempeño mensual de la flota EX3600</h1>
+    <div class="sub">Octubre 2026</div>
+    <div class="meta">
+      <span>Flota: <b>20 palas Hitachi EX3600-6 / -7</b></span>
+      <span>Periodo: <b>1 al 31 de octubre de 2026</b></span>
+      <span>Corte de datos: <b>10 de noviembre de 2026</b></span>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <!-- RESUMEN -->
+  <div id="resumen" class="kpis">
+    <div class="kpi"><div class="v">89,3%</div><div class="n">Disponibilidad física</div><div class="m">Plan 89,1% · Budget 88,7%</div><span class="pill ok">Cumple</span></div>
+    <div class="kpi"><div class="v">90,3%</div><div class="n">Disponibilidad contractual</div><div class="m">Garantizada 87,7%</div><span class="pill ok">Cumple</span></div>
+    <div class="kpi"><div class="v">98,6 h</div><div class="n">MTBF de flota</div><div class="m">Plan 79,6 h</div><span class="pill ok">Cumple</span></div>
+    <div class="kpi"><div class="v">4,9%</div><div class="n">Horas de imprevisto</div><div class="m">Meta ≤ 5%</div><span class="pill ok">Cumple</span></div>
+    <div class="kpi"><div class="v">82,2%</div><div class="n">Cumplimiento plan mensual</div><div class="m">310 de 377 · meta 80%</div><span class="pill ok">Cumple</span></div>
+    <div class="kpi"><div class="v">95,1%</div><div class="n">Cumplimiento de programación</div><div class="m">Banda 90–110%</div><span class="pill ok">Cumple</span></div>
+    <div class="kpi"><div class="v">45%</div><div class="n">PM que cumplen MTFS</div><div class="m">14 de 31 PM</div><span class="pill na">Seguimiento</span></div>
+    <div class="kpi bad"><div class="v">148%</div><div class="n">Ejecución presupuestal</div><div class="m">USD 1,55M vs 1,05M</div><span class="pill no">No cumple</span></div>
+  </div>
+  <div class="focus"><b>Foco del mes:</b> 60141 y 60137 bajan la disponibilidad (71,6% y 73,6%); el sistema hidráulico duplica su budget de indisponibilidad; la parada anual H145 lleva el presupuesto al 148%.</div>
+
+  <!-- SEGURIDAD -->
+  <section id="seguridad">
+    <div class="sec-h"><span class="sec-n">01 · Seguridad</span></div>
+    <h2>Un accidente con incapacidad deja TRIFR y LTIFR en 2,58 (meta 0); los ocho indicadores de gestión cumplen su meta</h2>
+    <p class="lede">Los datos de seguridad cargados en la base corresponden a septiembre de 2026; octubre está pendiente de carga.</p>
+    <div class="safety">
+      <div class="kpi"><div class="v">2,58</div><div class="n">TRIFR</div><div class="m">Lesiones registrables por millón de horas · meta 0</div></div>
+      <div class="kpi"><div class="v">2,58</div><div class="n">LTIFR</div><div class="m">Lesiones con tiempo perdido · meta 0</div></div>
+      <div class="kpi"><div class="v">77,5</div><div class="n">DISR</div><div class="m">Días perdidos por millón de horas · meta 0</div></div>
+      <div class="kpi"><div class="v">14,29</div><div class="n">Índice de severidad</div><div class="m">Frecuencia 0,48 · meta 0</div></div>
+    </div>
+    <div class="card tbl-wrap">
+      <table>
+        <thead><tr><th>Indicador de gestión</th><th>Resultado</th><th>Meta</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td>Actividades de liderazgo visible (MLV) ejecutadas</td><td>100%</td><td>100%</td><td><span class="pill ok">Cumple</span></td></tr>
+          <tr><td>Líderes que ejecutan actividades MLV</td><td>100%</td><td>100%</td><td><span class="pill ok">Cumple</span></td></tr>
+          <tr><td>Reporte de actos y condiciones inseguras</td><td>86,2%</td><td>80%</td><td><span class="pill ok">Cumple</span></td></tr>
+          <tr><td>Resolución de actos y condiciones inseguras</td><td>100%</td><td>80%</td><td><span class="pill ok">Cumple</span></td></tr>
+          <tr><td>Investigación de incidentes en 15 días</td><td>1 de 1</td><td>100%</td><td><span class="pill ok">Cumple</span></td></tr>
+          <tr><td>Recomendaciones de incidentes cerradas a tiempo</td><td>3 de 3</td><td>100%</td><td><span class="pill ok">Cumple</span></td></tr>
+          <tr><td>Quejas atendidas y cerradas</td><td>9 de 9</td><td>100%</td><td><span class="pill ok">Cumple</span></td></tr>
+          <tr><td>Auditoría RUC (escala 0–9)</td><td>7,83</td><td>7,2</td><td><span class="pill ok">Cumple</span></td></tr>
+        </tbody>
+      </table>
+      <div class="src">Fuente: pestaña SEGURIDAD, libro INFORME DE GERENCIA.</div>
+    </div>
+  </section>
+
+  <!-- DISPONIBILIDAD -->
+  <section id="disponibilidad">
+    <div class="sec-h"><span class="sec-n">02 · Disponibilidad</span></div>
+    <h2>La disponibilidad física se recuperó a 89,3% en octubre, sobre el plan de 89,1%, tras la caída a 85,8% en septiembre</h2>
+    <div class="grid g-2">
+      <div class="card"><h3>Disponibilidad física de la flota</h3><div class="cap">% · diciembre 2025 a octubre 2026</div><div class="chart"><canvas id="cDispFis"></canvas></div>
+        <details class="data"><summary>Ver datos</summary><div class="tbl-wrap" id="tDispFis"></div></details></div>
+      <div class="card side"><div class="big">+0,2 pp</div><div class="lbl">sobre el plan de octubre</div>
+        <ul><li>Septiembre quedó 1 pp bajo el plan por imprevistos en H148, H138 y H144.</li><li>Octubre supera también el budget (88,7%).</li></ul>
+        <div class="src">Fuente: pestaña PLANEACION.</div></div>
+    </div>
+    <div style="height:16px"></div>
+    <div class="grid g-2">
+      <div class="card"><h3>Disponibilidad contractual vs garantizada</h3><div class="cap">% · con tiempo F aprobado</div><div class="chart"><canvas id="cDispCon"></canvas></div>
+        <details class="data"><summary>Ver datos</summary><div class="tbl-wrap" id="tDispCon"></div></details></div>
+      <div class="card side"><div class="big">+2,6 pp</div><div class="lbl">sobre la disponibilidad garantizada</div>
+        <ul><li>Septiembre fue el único mes del año bajo la garantizada (87,1% vs 87,3%).</li><li>Tiempo F aprobado en octubre: 130 h (diciembre 453 h; julio 421 h).</li></ul>
+        <div class="src">Fuente: pestañas PLANEACION y TIEMPOS F.</div></div>
+    </div>
+  </section>
+
+  <!-- PLANEACION -->
+  <section id="planeacion">
+    <div class="sec-h"><span class="sec-n">03 · Planeación</span></div>
+    <h2>El plan mensual se cumplió al 82,2% (310 de 377 actividades): sobre la meta de 80%, pero baja por tercer mes consecutivo</h2>
+    <div class="grid g-2">
+      <div class="card"><h3>Cumplimiento del plan mensual de mantenimiento</h3><div class="cap">% · la línea punteada es la meta (80% desde enero 2026)</div><div class="chart"><canvas id="cPlan"></canvas></div>
+        <details class="data"><summary>Ver datos</summary><div class="tbl-wrap" id="tPlan"></div></details></div>
+      <div class="card side"><div class="big">67</div><div class="lbl">actividades no ejecutadas en octubre</div>
+        <ul><li>Junio fue el único mes bajo la meta (76,6%).</li><li>Julio → octubre: 86,8% → 83,4% → 83,2% → 82,2%.</li></ul>
+        <div class="src">Fuente: pestaña PLANEACION.</div></div>
+    </div>
+    <div style="height:16px"></div>
+    <div class="grid g-2e">
+      <div class="card"><h3>Horas de mantenimiento, plan vs real</h3><div class="cap">Octubre 2026 · horas</div><div class="chart"><canvas id="cHoras"></canvas></div>
+        <div class="src">Los imprevistos consumieron 703 h (+33% sobre el plan); el programado usó 77% de sus horas. Fuente: pestaña CASCADA.</div></div>
+      <div class="card"><h3>PM que cumplen MTFS</h3><div class="cap">% del total de PM del mes</div><div class="chart"><canvas id="cMtfs"></canvas></div>
+        <div class="src">Octubre: 14 de 31 PM (45%); sin PM cortos, 9 de 15 (60%). Septiembre fue el mínimo del año (22%).</div></div>
+    </div>
+  </section>
+
+  <!-- PROGRAMACION -->
+  <section id="programacion">
+    <div class="sec-h"><span class="sec-n">04 · Programación</span></div>
+    <h2>La programación se cumplió al 95,1% del backlog, pero el tiempo de PM llegó a 110,6%, en el límite de la banda</h2>
+    <div class="grid g-2e">
+      <div class="card"><h3>Cumplimiento de backlog y de tiempo de PM</h3><div class="cap">% · banda objetivo 90–110%</div><div class="chart"><canvas id="cProg"></canvas></div>
+        <div class="src">1.002 tareas ejecutadas de 1.054 programadas. Desfases por lluvia (38 h) y limpieza manual compartida (H141, H143). Fuente: PROGRAMACION.</div></div>
+      <div class="card"><h3>SEIS ejecutados sin solicitud de no ejecución (SN)</h3><div class="cap">% de PM del mes</div><div class="chart"><canvas id="cSeis"></canvas></div>
+        <div class="src">Octubre: 14 SN en 36 PM (10 cerradas, 4 abiertas). Causas: cruces en el mismo tajo y recursos para un tercer frente. Feb y mar recalculados (79% y 86%).</div></div>
+    </div>
+  </section>
+
+  <!-- CONFIABILIDAD -->
+  <section id="confiabilidad">
+    <div class="sec-h"><span class="sec-n">05 · Confiabilidad</span></div>
+    <h2>El MTBF de la flota subió a 98,6 h, 24% sobre el plan; el sistema hidráulico duplica su budget de indisponibilidad</h2>
+    <div class="grid g-2e">
+      <div class="card"><h3>MTBF real de flota vs plan</h3><div class="cap">Horas · sin horas stand-by</div><div class="chart"><canvas id="cMtbf"></canvas></div>
+        <div class="src">Repetitivos hidráulicos en 60141 (7 eventos), 60151 (4) y 60138 (3). Fuente: libro KPIS MARC PALAS.</div></div>
+      <div class="card"><h3>Indisponibilidad por sistema, octubre vs budget</h3><div class="cap">% de horas</div><div class="chart"><canvas id="cSis"></canvas></div>
+        <div class="src">MTBF por sistema (h, oct / budget): eléctrico 643/279 · potencia <b style="color:var(--bad)">257/378</b> · hidráulico 243/200 · accesorios 231/200. Fuente: SISTEMAS.</div></div>
+    </div>
+    <div style="height:16px"></div>
+    <div class="grid g-2">
+      <div class="card"><h3>Consumo de aceite de la flota</h3><div class="cap">Índice de la base CONFIABILIDAD · meta 0,75 (línea punteada)</div><div class="chart"><canvas id="cAceite"></canvas></div></div>
+      <div class="card side"><div class="big">0,63</div><div class="lbl">septiembre, 16% bajo la meta</div>
+        <ul><li>El dato de octubre figura en 0 en la base: pendiente de carga.</li><li>Seguir 60151: repuso 682 gal por fuga en el bloque de válvulas #3.</li></ul></div>
+    </div>
+  </section>
+
+  <!-- MALOS ACTORES -->
+  <section id="malos-actores">
+    <div class="sec-h"><span class="sec-n">06 · Malos actores</span></div>
+    <h2>60141 y 60137 concentran la baja de disponibilidad; siete palas quedaron bajo la meta de MTBF</h2>
+    <div class="card">
+      <div class="tabs" role="tablist"><button class="on" data-t="disp">Disponibilidad física</button><button data-t="mtbf">MTBF</button></div>
+      <div class="legend" id="legDisp">
+        <span><i class="h-a"></i>≥ plan + 2 pp</span><span><i class="h-g"></i>≥ plan</span><span><i class="h-y"></i>hasta 2 pp bajo plan</span><span><i class="h-r"></i>más de 2 pp bajo plan</span><span><i class="h-n"></i>sin dato</span>
+        <span style="color:var(--ink-3)">Plan de flota: may 86,6 · jun 86,0 · jul 88,1 · ago 86,7 · sep 86,8 · oct 89,1</span>
+      </div>
+      <div class="legend" id="legMtbf" hidden>
+        <span><i class="h-a"></i>≥ meta + 10 h</span><span><i class="h-g"></i>≥ meta</span><span><i class="h-y"></i>hasta 10 h bajo meta</span><span><i class="h-r"></i>más de 10 h bajo meta</span><span><i class="h-n"></i>sin dato</span>
+        <span style="color:var(--ink-3)">Meta: EX3600-6 78,4 h · EX3600-7 80,5 h</span>
+      </div>
+      <div class="tbl-wrap"><table class="heat" id="heat"></table></div>
+      <div class="src">Fuente: pestaña MALOS ACTORES. Colores calculados con una sola regla por mes.</div>
+    </div>
+    <div style="height:16px"></div>
+    <div class="eq-notes">
+      <div class="eq"><b>60141</b><span class="k">71,6% · MTBF 30,8 h</span> — 187 h imprevistas en 16 eventos; fuga en cilindros de brazo LH/RH (98 h), rótula de cilindro de levante fracturada (23 h) y fuga de grasa en la biela (17 h).</div>
+      <div class="eq"><b>60137</b><span class="k">73,6%</span> — 99 h imprevistas (pin y rótula de cilindro de balde, 57 h) más 90 h programadas por cambio de sprocket derecho.</div>
+      <div class="eq"><b>60138</b><span class="k">84,7% · MTBF 62,8 h</span> — radiadores (16 h), regulador de bomba y válvula de sobrecarga; SEIS 600 + 300 con desfase de +28,7 h sin causa registrada.</div>
+      <div class="eq"><b>60150</b><span class="k">85,5%</span> — 60 h imprevistas: cilindro de cucharón con alto diferencial de temperatura (22 h) y correa de A/A (18 h).</div>
+    </div>
+  </section>
+
+  <!-- PRESUPUESTO -->
+  <section id="presupuesto">
+    <div class="sec-h"><span class="sec-n">07 · Presupuesto</span></div>
+    <h2>El gasto de octubre llegó a 148% del presupuesto (USD 1,55M vs 1,05M); incluye USD 717K de la parada anual H145</h2>
+    <div class="grid g-2">
+      <div class="card"><h3>Consumo y presupuesto mensual</h3><div class="cap">Repuestos + filtros + lubricantes · USD millones · 2026</div><div class="chart"><canvas id="cPpto"></canvas></div>
+        <details class="data"><summary>Ver datos</summary><div class="tbl-wrap" id="tPpto"></div></details></div>
+      <div class="card">
+        <h3>Octubre por concepto</h3><div class="cap">USD</div>
+        <table>
+          <thead><tr><th>Concepto</th><th>Real</th><th>Ppto.</th><th>%</th></tr></thead>
+          <tbody>
+            <tr><td>Repuestos</td><td>1.201.060</td><td>744.523</td><td style="color:var(--bad);font-weight:700">161%</td></tr>
+            <tr><td>Lubricantes</td><td>244.127</td><td>237.859</td><td>103%</td></tr>
+            <tr><td>Filtros</td><td>103.072</td><td>65.101</td><td style="color:var(--bad);font-weight:700">158%</td></tr>
+            <tr><td><b>Total</b></td><td><b>1.548.259</b></td><td><b>1.047.483</b></td><td style="color:var(--bad);font-weight:800">148%</td></tr>
+          </tbody>
+        </table>
+        <div class="side" style="margin-top:16px"><ul>
+          <li><b>Acumulado del año: 106%</b> (USD 14,30M vs 13,52M).</li>
+          <li>Imprevistos del mes: USD 215K — H138 radiadores y bomba 3/4, H151 válvula #3, H157 motores de propel, H144 motor de giro.</li>
+          <li>Timing: parada anual H145 (USD 717K) y motores de giro H153 (USD 48,6K).</li>
+        </ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOPORTE -->
+  <section id="soporte">
+    <div class="sec-h"><span class="sec-n">08 · Equipos de soporte</span></div>
+    <h2>Tres equipos de soporte operaron menos de la mitad del mes: camiones PTO 1 y 2 y canasta 1, frente a un plan de 83%</h2>
+    <div class="grid g-2">
+      <div class="card"><h3>Disponibilidad de equipos de soporte</h3><div class="cap">% · octubre 2026 · plan 83%</div><div class="chart tall"><canvas id="cSop"></canvas></div></div>
+      <div class="card side"><div class="big r">11 de 31</div><div class="lbl">días operó el camión PTO 1</div>
+        <ul><li>Los camiones PTO y la canasta 1 limitan los trabajos en ventana.</li><li>60157 tuvo 4 h de demora por falta de canasta.</li></ul>
+        <div class="src">Fuente: pestaña EQUIPOS DE SOPORTE.</div></div>
+    </div>
+  </section>
+
+  <!-- PLAN -->
+  <section id="plan">
+    <div class="sec-h"><span class="sec-n">09 · Plan de acción</span></div>
+    <h2>Siete frentes con responsable, indicador de cierre y fecha</h2>
+    <div class="card tbl-wrap">
+      <table class="plan">
+        <thead><tr><th>Frente</th><th>Hallazgo</th><th>Acción</th><th>Responsable</th><th>Indicador de cierre</th><th>Fecha</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td>60141</td><td>Disp. 71,6% · MTBF 30,8 h · fugas en cilindros de brazo</td><td>RCA de fugas en cilindros de brazo y levante; inspección de tapas y rótulas en la flota EX3600-6</td><td>Confiabilidad</td><td>MTBF ≥ 79,6 h en diciembre</td><td class="f">30-nov</td><td><span class="tag">Abierta · 0%</span></td></tr>
+          <tr><td>60137</td><td>Disp. 73,6% · 99 h imprevistas + 90 h sprocket</td><td>RCA de cilindro de balde; medir tren de rodaje en el SEIS para programar sprocket</td><td>Confiabilidad / Planeación</td><td>Disp. ≥ plan del mes</td><td class="f">30-nov</td><td><span class="tag">Abierta · 0%</span></td></tr>
+          <tr><td>60138</td><td>Radiadores y bloque principal · SEIS +28,7 h</td><td>Cerrar cambio de radiadores, calibrar reguladores de bomba y registrar causa de cada desfase</td><td>Mantenimiento / Programación</td><td>0 desfases sin causa</td><td class="f">15-dic</td><td><span class="tag">Abierta · 0%</span></td></tr>
+          <tr><td>60151</td><td>Fuga en bloque de válvulas #3 · 682 gal</td><td>Verificar eliminación de la fuga y seguir la reposición de aceite semanal</td><td>Monitoreo de condición</td><td>0 gal repuestos en 4 semanas</td><td class="f">15-dic</td><td><span class="tag">Abierta · 0%</span></td></tr>
+          <tr><td>Programación</td><td>Tiempo PM 110,6% · desfases por limpieza y canasta</td><td>Reservar limpieza y canasta 24 h antes de cada ventana</td><td>Programación</td><td>Tiempo PM 90–110%</td><td class="f">30-nov</td><td><span class="tag">Abierta · 0%</span></td></tr>
+          <tr><td>Soporte</td><td>PTO 1: 35% · PTO 2: 52% · Canasta 1: 48%</td><td>Plan de recuperación por equipo, con equipo de respaldo</td><td>Mantenimiento</td><td>Cada equipo ≥ 83%</td><td class="f">15-dic</td><td><span class="tag">Abierta · 0%</span></td></tr>
+          <tr><td>Datos</td><td>Seguridad, aceite y tiempo F de octubre incompletos</td><td>Cierre de datos el día 5 con una sola fuente por indicador</td><td>Planeación / Análisis de datos</td><td>0 páginas con otro periodo</td><td class="f">05-dic</td><td><span class="tag">Abierta · 0%</span></td></tr>
+        </tbody>
+      </table>
+      <div class="src">Responsables, fechas e indicadores de cierre propuestos para validación en comité.</div>
+    </div>
+  </section>
+
+  <!-- NOTAS -->
+  <section id="notas">
+    <div class="sec-h"><span class="sec-n">10 · Notas de datos</span></div>
+    <h2>Cifras ajustadas respecto a las bases y pendientes de carga</h2>
+    <div class="dq">
+      <div><span><b>Seguridad:</b> la base solo tiene septiembre; los indicadores mostrados son de ese mes.</span></div>
+      <div><span><b>Plan mensual:</b> se reporta el cierre de octubre (82,2%); la página de Looker muestra noviembre en curso.</span></div>
+      <div><span><b>Tiempo F:</b> los 196 registros de octubre no tienen MES y el detalle no coincide con PLANEACION en abril, julio, agosto y septiembre.</span></div>
+      <div><span><b>Presupuesto:</b> el % se calcula con totales (148%), no con el promedio de conceptos (141%); el acumulado de la hoja se descuadra desde abril.</span></div>
+      <div><span><b>Horas de imprevisto:</b> 4,9% (CASCADA) frente a 4,18% en el libro de KPIs; se usa CASCADA hasta unificar la fuente.</span></div>
+    </div>
+  </section>
+
+  <footer>
+    CHM Minería · Contrato MARC Palas EX3600 · Cerrejón · Informe de Gerencia, octubre 2026.<br>
+    Fuentes: libros «INFORME DE GERENCIA» y «KPIS - CHM MINERIA - CERREJÓN - MARC PALAS». Documento de uso interno.
+  </footer>
+</main>
+
+<script>
+const M=["Dic 25","Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct"];
+const S1="#3A56B8", S2="#B87F00", NEU="#C9CED9", NEU2="#A9B0C0", BAD="#C8102E", INK2="#4A5163", INK3="#6B7385", GRID="#EEF0F4";
+const nf=(v,d=1)=>v==null?"—":v.toLocaleString("es-CO",{minimumFractionDigits:d,maximumFractionDigits:d});
+Chart.defaults.font.family='"Segoe UI",Calibri,Carlito,Inter,system-ui,Arial,sans-serif';
+Chart.defaults.font.size=12; Chart.defaults.color=INK3;
+Chart.defaults.plugins.legend.labels.boxWidth=12; Chart.defaults.plugins.legend.labels.boxHeight=12;
+Chart.defaults.plugins.legend.labels.usePointStyle=true;
+const _gen=Chart.defaults.plugins.legend.labels.generateLabels;
+Chart.defaults.plugins.legend.labels.generateLabels=function(c){return _gen(c).map(l=>{const ds=c.data.datasets[l.datasetIndex];const col=ds.borderColor&&c.config.type==="line"?ds.borderColor:l.fillStyle;l.fillStyle=col;l.strokeStyle=col;l.pointStyle="circle";l.lineWidth=0;return l;});};
+Chart.defaults.plugins.tooltip.backgroundColor="#16191F"; Chart.defaults.plugins.tooltip.padding=10;
+Chart.defaults.plugins.tooltip.cornerRadius=8; Chart.defaults.maintainAspectRatio=false;
+Chart.defaults.interaction={mode:"index",intersect:false};
+
+/* end-of-line / on-bar value labels (selective) */
+const endLabels={id:"endLabels",afterDatasetsDraw(c,_,o){if(!o||!o.on)return;const x=c.ctx;x.save();
+  c.data.datasets.forEach((ds,i)=>{const meta=c.getDatasetMeta(i);if(meta.hidden||ds.noEnd)return;
+    if(c.config.type==="line"){const p=meta.data[meta.data.length-1];if(!p)return;(c._ends=c._ends||[]).push({y:p.y,x:p.x,t:o.fmt(ds.data[ds.data.length-1]),col:ds.borderColor});}
+    else{meta.data.forEach((b,j)=>{const v=ds.data[j];if(v==null)return;x.fillStyle="#16191F";x.font="600 11px "+Chart.defaults.font.family;
+      if(c.options.indexAxis==="y"){x.textBaseline="middle";x.textAlign="left";x.fillText(o.fmt(v),b.x+6,b.y);}
+      else{x.textAlign="center";x.textBaseline="bottom";x.fillText(o.fmt(v),b.x,b.y-4);}});}
+  });
+  if(c._ends){const e=c._ends.sort((a,b)=>a.y-b.y);for(let i=1;i<e.length;i++){if(e[i].y-e[i-1].y<15)e[i].y=e[i-1].y+15;}
+    e.forEach(l=>{x.fillStyle=l.col;x.font="700 12px "+Chart.defaults.font.family;x.textBaseline="middle";x.textAlign="left";x.fillText(l.t,l.x+8,l.y);});c._ends=null;}
+  x.restore();}};
+const refLine={id:"refLine",afterDatasetsDraw(c,_,o){if(!o||o.value==null)return;const x=c.ctx,ax=o.axis==="x"?c.scales.x:c.scales.y;const p=ax.getPixelForValue(o.value);
+  x.save();x.setLineDash([5,4]);x.strokeStyle=INK2;x.lineWidth=1.2;x.beginPath();
+  if(o.axis==="x"){x.moveTo(p,c.chartArea.top);x.lineTo(p,c.chartArea.bottom);}else{x.moveTo(c.chartArea.left,p);x.lineTo(c.chartArea.right,p);}
+  x.stroke();x.setLineDash([]);x.fillStyle=INK2;x.font="600 11px "+Chart.defaults.font.family;
+  if(o.axis==="x"){x.textAlign="center";x.fillText(o.label,p,c.chartArea.top-6);}else{x.textAlign="right";x.fillText(o.label,c.chartArea.right,p-6);}x.restore();}};
+Chart.register(endLabels,refLine);
+
+function lineChart(id,series,unit,min,max,step){
+  return new Chart(document.getElementById(id),{type:"line",
+    data:{labels:M,datasets:series.map(s=>({label:s.n,data:s.v,borderColor:s.c,backgroundColor:s.c,borderWidth:s.w||2,pointRadius:3.5,pointHoverRadius:6,pointBackgroundColor:"#fff",pointBorderWidth:2,tension:.25,noEnd:s.noEnd,borderDash:s.dash||[]}))},
+    options:{layout:{padding:{right:52,top:6}},plugins:{legend:{position:"top",align:"start"},endLabels:{on:true,fmt:v=>nf(v)+unit},
+      tooltip:{callbacks:{label:t=>" "+t.dataset.label+": "+nf(t.parsed.y)+unit}}},
+      scales:{y:{min,max,ticks:{stepSize:step,callback:v=>nf(v,0)+unit},grid:{color:GRID},border:{display:false}},x:{grid:{display:false}}}}});
+}
+function barChart(id,labels,vals,colors,unit,max,ref,dec=1,opts={}){
+  return new Chart(document.getElementById(id),{type:"bar",
+    data:{labels,datasets:[{label:opts.label||"Valor",data:vals,backgroundColor:colors,borderRadius:{topLeft:4,topRight:4,bottomLeft:0,bottomRight:0},borderSkipped:false,maxBarThickness:46,categoryPercentage:.8,barPercentage:.9}]},
+    options:{indexAxis:opts.horizontal?"y":"x",layout:{padding:{top:22,right:opts.horizontal?44:0}},interaction:{mode:"nearest",intersect:true},
+      plugins:{legend:{display:false},endLabels:{on:true,fmt:v=>nf(v,dec)+unit},refLine:ref||{},
+        tooltip:{callbacks:{label:t=>" "+nf(opts.horizontal?t.parsed.x:t.parsed.y,dec)+unit}}},
+      scales:opts.horizontal?{x:{min:0,max,display:false},y:{grid:{display:false},border:{display:false},ticks:{color:INK2,font:{size:13}}}}
+        :{y:{min:0,max,display:false},x:{grid:{display:false},ticks:{color:INK2}}}}});
+}
+function groupChart(id,labels,a,b,na,nb,unit,max,dec=1){
+  return new Chart(document.getElementById(id),{type:"bar",
+    data:{labels,datasets:[{label:na,data:a,backgroundColor:NEU,borderRadius:{topLeft:4,topRight:4},borderSkipped:false,maxBarThickness:40},
+                           {label:nb,data:b,backgroundColor:S1,borderRadius:{topLeft:4,topRight:4},borderSkipped:false,maxBarThickness:40}]},
+    options:{layout:{padding:{top:20}},plugins:{legend:{position:"top",align:"start"},endLabels:{on:true,fmt:v=>nf(v,dec)+unit},
+      tooltip:{callbacks:{label:t=>" "+t.dataset.label+": "+nf(t.parsed.y,dec)+unit}}},
+      scales:{y:{min:0,max,display:false},x:{grid:{display:false},ticks:{color:INK2}},}}});
+}
+function table(el,head,rows){document.getElementById(el).innerHTML="<table><thead><tr>"+head.map(h=>"<th>"+h+"</th>").join("")+"</tr></thead><tbody>"+rows.map(r=>"<tr>"+r.map(c=>"<td>"+c+"</td>").join("")+"</tr>").join("")+"</tbody></table>";}
+
+// Disponibilidad física
+const real=[88.51,88.00,89.80,88.61,87.34,88.30,87.69,89.43,87.78,85.80,89.31],
+      plan=[87.77,87.67,87.90,88.01,87.80,86.57,85.95,88.06,86.73,86.75,89.14],
+      bdg=[89.3,85.23,86.7,87.96,90.23,86.45,87.12,88.08,87.17,88.8,88.7];
+lineChart("cDispFis",[{n:"Real",v:real,c:S1,w:2.5},{n:"Plan",v:plan,c:S2},{n:"Budget",v:bdg,c:NEU2,dash:[4,4],noEnd:true}],"%",84,91,1);
+table("tDispFis",["Mes","Real","Plan","Budget"],M.map((m,i)=>[m,nf(real[i])+"%",nf(plan[i])+"%",nf(bdg[i])+"%"]));
+const con=[91.77,88.83,90.77,89.03,88.44,88.92,88.60,92.40,88.31,87.07,90.26],gar=[87.62,87.60,87.70,87.50,87.02,86.70,86.89,87.90,87.31,87.26,87.70],tf=[453.4,111.6,123.4,60.0,150.6,87.7,125.0,420.5,74.4,173.3,129.6];
+lineChart("cDispCon",[{n:"Contractual",v:con,c:S1,w:2.5},{n:"Garantizada",v:gar,c:S2}],"%",85,93,2);
+table("tDispCon",["Mes","Contractual","Garantizada","Tiempo F (h)"],M.map((m,i)=>[m,nf(con[i])+"%",nf(gar[i])+"%",nf(tf[i])]));
+// Plan mensual
+const pm=[97.18,83.95,88.01,90.67,89.37,90.44,76.59,86.81,83.42,83.17,82.23];
+barChart("cPlan",M,pm,pm.map((v,i)=>i===10?S1:(v<80?BAD:NEU)),"%",110,{value:80,label:""});
+table("tPlan",["Mes","Cumplimiento"],M.map((m,i)=>[m,nf(pm[i])+"%"]));
+groupChart("cHoras",["Programado","Imprevisto","Total"],[1044.1,529.7,1573.8],[807.0,703.3,1510.3],"Plan","Real"," h",1800,0);
+const mt=[32,52,52,47,44,39,42,44,33,22,45];
+barChart("cMtfs",M,mt,mt.map((v,i)=>i===10?S1:NEU),"%",60,null,0);
+// Programación
+lineChart("cProg",[{n:"Backlog",v:[92.14,93.30,95.81,96.62,94.58,98.49,95.92,97.57,98.19,93.47,95.07],c:S1,w:2.5},{n:"Tiempo PM",v:[98.16,118.45,99.57,101.89,115.16,102.93,106.55,104.38,102.10,93.73,110.63],c:S2}],"%",85,120,5);
+const se=[88.2,79.5,79.4,86.5,54.3,62.2,79.4,86.5,82.9,79.4,61.1];
+barChart("cSeis",M,se,se.map((v,i)=>i===10?S1:NEU),"%",100,null,0);
+// Confiabilidad
+lineChart("cMtbf",[{n:"Real",v:[90,89.5,80.5,99.6,75.4,80.3,87,94.3,80,72.8,98.6],c:S1,w:2.5},{n:"Plan",v:[69.9,69.9,69.9,69.9,69.9,69.9,79.6,79.6,79.6,79.6,79.6],c:S2}]," h",60,105,10);
+groupChart("cSis",["PM","Hidráulico","Potencia","Accesorios","Eléctrico","Estructural"],[8.3,1.3,0.2,0.8,0.5,0.2],[5.8,2.4,0.9,0.8,0.3,0.2],"Budget","Octubre","%",9.5,1);
+const ac=[0.49,0.49,0.29,0.40,0.57,0.71,0.41,0.60,0.55,0.63,null];
+barChart("cAceite",M,ac,ac.map((v,i)=>i===9?S1:NEU),"",0.85,{value:0.75,label:"Meta 0,75"},2);
+// Presupuesto
+const pmes=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct"],
+  cons=[1186930,1411317,1406006,1513700,1324312,1891174,1050968,1303882,1663537,1548259],
+  bud=[1578290,1637382,1396619,705954,1075413,1630369,1370132,1965374,1112280,1047483];
+groupChart("cPpto",pmes,bud.map(v=>v/1e6),cons.map(v=>v/1e6),"Presupuesto","Consumo","",2.25,2);
+table("tPpto",["Mes","Consumo USD","Presupuesto USD","%"],pmes.map((m,i)=>[m,cons[i].toLocaleString("es-CO"),bud[i].toLocaleString("es-CO"),nf(cons[i]/bud[i]*100,0)+"%"]));
+// Soporte
+const sop=["Camión PTO 1","Canasta 1","Camión PTO 2","Compresor 2","Canasta 2","Luminaria 2","Manlift","Compresor 1","Luminaria 1"],sv=[35.5,48.4,51.6,83.9,94.5,95.2,100,100,100];
+barChart("cSop",sop,sv,sv.map(v=>v<83?BAD:NEU),"%",112,{value:83,label:"Plan 83%",axis:"x"},0,{horizontal:true});
+
+// Heatmap malos actores
+const EQ=["60137","60138","60139","60140","60141","60142","60143","60144","60145","60146","60147","60148","60149","60150","60151","60152","60153","60154","60155","60156","60157","60158"];
+const HM=["Mayo","Junio","Julio","Agosto","Septiembre","Octubre"];
+const N=null;
+const D={"60137":[N,N,N,N,N,73.6],"60138":[88.5,86.7,83.9,78.8,58.1,84.7],"60139":[84.0,69.4,89.5,87.1,83.6,94.7],"60140":[89.2,88.6,89.5,89.7,96.1,88.9],"60141":[87.8,86.0,85.9,86.7,70.1,71.6],"60142":[82.2,88.4,90.2,71.7,67.7,88.2],"60143":[86.9,89.5,68.9,77.1,89.0,88.5],"60144":[96.4,89.8,91.6,92.7,77.5,96.6],"60145":[90.4,76.0,88.6,91.5,92.5,96.4],"60146":[80.6,98.7,N,N,N,N],"60147":[88.5,88.7,N,N,N,N],"60148":[93.5,67.5,91.4,86.3,82.9,89.3],"60149":[90.7,92.4,92.5,88.4,87.3,90.9],"60150":[77.1,98.0,85.5,88.6,93.5,85.5],"60151":[81.8,91.0,92.5,93.6,80.0,94.2],"60152":[88.8,89.9,91.8,85.2,95.6,92.9],"60153":[93.1,97.1,92.9,89.0,90.8,96.5],"60154":[90.9,89.2,90.5,91.2,92.4,88.8],"60155":[93.2,93.3,94.2,92.7,93.8,96.0],"60156":[93.8,85.7,93.4,87.9,94.1,91.5],"60157":[93.4,94.7,93.4,93.5,92.7,90.2],"60158":[N,N,96.7,96.3,93.5,94.4]};
+const B={"60137":[N,N,N,N,N,76.7],"60138":[52.5,65.0,38.8,48.5,14.5,62.8],"60139":[37.6,178.2,7.3,39.1,40.9,128.6],"60140":[280.4,92.2,92.6,95.6,174.9,247.9],"60141":[49.7,41.5,37.4,46.5,62.3,30.8],"60142":[117.8,132.3,82.2,104.2,67.7,57.4],"60143":[260.2,115.5,104.8,57.9,39.9,157.1],"60144":[61.7,51.2,141.3,293.5,106.7,132.7],"60145":[71.6,72.2,104.8,61.5,50.8,77.7],"60146":[33.9,81.4,N,N,N,N],"60147":[92.1,51.1,N,N,N,N],"60148":[93.0,129.8,81.6,50.7,71.1,164.5],"60149":[138.8,80.3,115.4,181.8,157.3,67.4],"60150":[50.6,174.8,47.5,52.4,124.1,93.0],"60151":[73.3,143.2,143.4,133.6,71.2,65.9],"60152":[93.7,69.9,187.1,101.7,129.3,466.7],"60153":[294.1,496.3,265.8,54.1,271.1,117.5],"60154":[51.4,67.4,138.0,143.0,100.6,99.1],"60155":[152.4,170.6,194.0,145.7,502.2,264.8],"60156":[183.9,226.1,96.6,109.1,256.1,121.8],"60157":[188.0,490.4,546.2,81.6,167.2,155.5],"60158":[N,N,526.2,600.8,72.8,113.1]};
+const PLAN=[86.57,85.95,88.06,86.73,86.75,89.14];
+const ex6=new Set(["60137","60138","60139","60140","60141","60142","60143","60144","60146","60147","60148"]);
+function cls(v,ref,up,dn){if(v==null||v===0)return"h-n";if(v>=ref+up)return"h-a";if(v>=ref)return"h-g";if(v>=ref-dn)return"h-y";return"h-r";}
+function heat(kind){
+  const data=kind==="disp"?D:B;let h="<thead><tr><th>Equipo</th>"+HM.map(m=>"<th>"+m+"</th>").join("")+"</tr></thead><tbody>";
+  EQ.forEach(e=>{h+="<tr><td>"+e+"</td>"+data[e].map((v,i)=>{const c=kind==="disp"?cls(v,PLAN[i],2.1,2.0):cls(v,ex6.has(e)?78.4:80.5,10,10);
+    const t=v==null?"—":(kind==="disp"?nf(v)+"%":nf(v));return '<td class="'+c+'" title="'+e+" · "+HM[i]+": "+t+'">'+t+"</td>";}).join("")+"</tr>";});
+  document.getElementById("heat").innerHTML=h+"</tbody>";
+  document.getElementById("legDisp").hidden=kind!=="disp";document.getElementById("legMtbf").hidden=kind!=="mtbf";
+}
+heat("disp");
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x===b));heat(b.dataset.t);});
+
+// nav highlight
+const links=[...document.querySelectorAll("#nav a")];
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id));}}),{rootMargin:"-40% 0px -55% 0px"});
+document.querySelectorAll("section,[id=resumen]").forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
