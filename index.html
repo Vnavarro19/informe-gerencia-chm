@@ -34,7 +34,7 @@ nav a:hover,nav a.on{background:rgba(255,255,255,.12);color:#fff}
 .print{background:var(--amber);color:#1B2A5E;border:0;border-radius:8px;font-weight:700;font-size:13px;padding:8px 12px;cursor:pointer;white-space:nowrap}
 
 /* Hero */
-.hero{background:var(--navy);color:#fff;padding:54px 0 120px;position:relative}
+.hero{background:linear-gradient(90deg,rgba(17,27,62,.94) 0%,rgba(17,27,62,.78) 45%,rgba(17,27,62,.35) 100%),url("assets/portada.jpg") center 62%/cover no-repeat,var(--navy);color:#fff;padding:70px 0 130px;position:relative;min-height:440px}
 .eyebrow{color:var(--amber);font-weight:700;font-size:12px;letter-spacing:3px;text-transform:uppercase}
 .hero h1{font-size:44px;line-height:1.1;margin:12px 0 8px;font-weight:800;letter-spacing:-.5px}
 .hero .sub{font-size:20px;color:#DCE2F5}
@@ -268,8 +268,8 @@ footer{margin-top:50px;padding:26px 0 40px;color:var(--ink-3);font-size:12.5px;b
     <div style="height:16px"></div>
     <div class="grid g-2">
       <div class="card"><h3>Consumo de aceite de la flota</h3><div class="cap">Índice de la base CONFIABILIDAD · meta 0,75 (línea punteada)</div><div class="chart"><canvas id="cAceite"></canvas></div></div>
-      <div class="card side"><div class="big">0,63</div><div class="lbl">septiembre, 16% bajo la meta</div>
-        <ul><li>El dato de octubre figura en 0 en la base: pendiente de carga.</li><li>Seguir 60151: repuso 682 gal por fuga en el bloque de válvulas #3.</li></ul></div>
+      <div class="card side"><div class="big">0,52</div><div class="lbl">octubre, 31% bajo la meta de 0,75</div>
+        <ul><li>Baja desde 0,63 en septiembre; los 11 meses quedan bajo la meta.</li><li>Seguir 60151: repuso 682 gal por fuga en el bloque de válvulas #3.</li></ul></div>
     </div>
   </section>
 
@@ -352,7 +352,7 @@ footer{margin-top:50px;padding:26px 0 40px;color:var(--ink-3);font-size:12.5px;b
           <tr><td>60151</td><td>Fuga en bloque de válvulas #3 · 682 gal</td><td>Verificar eliminación de la fuga y seguir la reposición de aceite semanal</td><td>Monitoreo de condición</td><td>0 gal repuestos en 4 semanas</td><td class="f">15-dic</td><td><span class="tag">Abierta · 0%</span></td></tr>
           <tr><td>Programación</td><td>Tiempo PM 110,6% · desfases por limpieza y canasta</td><td>Reservar limpieza y canasta 24 h antes de cada ventana</td><td>Programación</td><td>Tiempo PM 90–110%</td><td class="f">30-nov</td><td><span class="tag">Abierta · 0%</span></td></tr>
           <tr><td>Soporte</td><td>PTO 1: 35% · PTO 2: 52% · Canasta 1: 48%</td><td>Plan de recuperación por equipo, con equipo de respaldo</td><td>Mantenimiento</td><td>Cada equipo ≥ 83%</td><td class="f">15-dic</td><td><span class="tag">Abierta · 0%</span></td></tr>
-          <tr><td>Datos</td><td>Seguridad, aceite y tiempo F de octubre incompletos</td><td>Cierre de datos el día 5 con una sola fuente por indicador</td><td>Planeación / Análisis de datos</td><td>0 páginas con otro periodo</td><td class="f">05-dic</td><td><span class="tag">Abierta · 0%</span></td></tr>
+          <tr><td>Datos</td><td>Seguridad y tiempo F de octubre incompletos</td><td>Cierre de datos el día 5 con una sola fuente por indicador</td><td>Planeación / Análisis de datos</td><td>0 páginas con otro periodo</td><td class="f">05-dic</td><td><span class="tag">Abierta · 0%</span></td></tr>
         </tbody>
       </table>
       <div class="src">Responsables, fechas e indicadores de cierre propuestos para validación en comité.</div>
@@ -459,8 +459,8 @@ barChart("cSeis",M,se,se.map((v,i)=>i===10?S1:NEU),"%",100,null,0);
 // Confiabilidad
 lineChart("cMtbf",[{n:"Real",v:[90,89.5,80.5,99.6,75.4,80.3,87,94.3,80,72.8,98.6],c:S1,w:2.5},{n:"Plan",v:[69.9,69.9,69.9,69.9,69.9,69.9,79.6,79.6,79.6,79.6,79.6],c:S2}]," h",60,105,10);
 groupChart("cSis",["PM","Hidráulico","Potencia","Accesorios","Eléctrico","Estructural"],[8.3,1.3,0.2,0.8,0.5,0.2],[5.8,2.4,0.9,0.8,0.3,0.2],"Budget","Octubre","%",9.5,1);
-const ac=[0.49,0.49,0.29,0.40,0.57,0.71,0.41,0.60,0.55,0.63,null];
-barChart("cAceite",M,ac,ac.map((v,i)=>i===9?S1:NEU),"",0.85,{value:0.75,label:"Meta 0,75"},2);
+const ac=[0.49,0.49,0.29,0.40,0.57,0.71,0.41,0.60,0.55,0.63,0.52];
+barChart("cAceite",M,ac,ac.map((v,i)=>i===10?S1:NEU),"",0.85,{value:0.75,label:"Meta 0,75"},2);
 // Presupuesto
 const pmes=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct"],
   cons=[1186930,1411317,1406006,1513700,1324312,1891174,1050968,1303882,1663537,1548259],
